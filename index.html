@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malaysian Tax Adventure</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+            min-height: 100vh;
+        }
+        .game-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #FF9D6C 0%, #FF701F 100%);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 112, 31, 0.4);
+        }
+        .btn-secondary {
+            background: linear-gradient(135deg, #6EDCC4 0%, #1AAB8B 100%);
+        }
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(26, 171, 139, 0.4);
+        }
+        .income-card {
+            background: linear-gradient(135deg, #F6D365 0%, #FDA085 100%);
+        }
+        .deduction-card {
+            background: linear-gradient(135deg, #90F7EC 0%, #32CCBC 100%);
+        }
+        .relief-card {
+            background: linear-gradient(135deg, #ABDCFF 0%, #0396FF 100%);
+        }
+        .tax-card {
+            background: linear-gradient(135deg, #CE9FFC 0%, #7367F0 100%);
+        }
+    </style>
+</head>
+<body class="p-4">
+    <div class="max-w-4xl mx-auto my-8 game-container p-6">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">Malaysian Tax Adventure 🇲🇾</h1>
+            <p class="text-lg text-gray-600">Learn how income tax works in Malaysia while having fun!</p>
+        </div>
+        <div class="text-center mb-6">
+            <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_cg3eqb.json" background="transparent" speed="1" style="width: 150px; height: 150px;" loop autoplay></lottie-player>
+        </div>
+        <div id="game">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="card income-card p-5 text-white">
+                    <h4 class="text-xl font-bold mb-2">Annual Income</h4>
+                    <p id="income-value" class="text-3xl font-bold">RM 60,000</p>
+                </div>
+                <div class="card deduction-card p-5 text-white">
+                    <h4 class="text-xl font-bold mb-2">Tax Deduction</h4>
+                    <p id="deduction-value" class="text-3xl font-bold">RM 3,000</p>
+                </div>
+                <div class="card relief-card p-5 text-white">
+                    <h4 class="text-xl font-bold mb-2">Tax Relief</h4>
+                    <p id="relief-value" class="text-3xl font-bold">RM 4,000</p>
+                </div>
+                <div class="card tax-card p-5 text-white">
+                    <h4 class="text-xl font-bold mb-2">Tax Payable</h4>
+                    <p id="tax-value" class="text-3xl font-bold">RM ?</p>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+                <h3 class="text-2xl font-bold mb-4 text-gray-800">Calculate Tax Payable</h3>
+                <input id="chargeable-income" type="number" class="w-full p-3 border border-gray-300 rounded-lg mb-4" placeholder="Chargeable Income" readonly>
+                <input id="tax-payable-input" type="number" class="w-full p-3 border border-gray-300 rounded-lg mb-4" placeholder="Enter your calculated tax">
+                <button onclick="calculateChargeableIncome()" class="btn-secondary text-white font-bold py-2 px-6 rounded-full mr-2">Calculate</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const income = 60000;
+        const deduction = 3000;
+        const relief = 4000;
+        function calculateTax(chargeableIncome) {
+            let tax = 0;
+            if (chargeableIncome <= 5000) tax = 0;
+            else if (chargeableIncome <= 20000) tax = (chargeableIncome - 5000) * 0.01;
+            else if (chargeableIncome <= 35000) tax = 150 + (chargeableIncome - 20000) * 0.03;
+            else if (chargeableIncome <= 50000) tax = 150 + 450 + (chargeableIncome - 35000) * 0.06;
+            else if (chargeableIncome <= 70000) tax = 150 + 450 + 900 + (chargeableIncome - 50000) * 0.11;
+            else if (chargeableIncome <= 100000) tax = 150 + 450 + 900 + 2200 + (chargeableIncome - 70000) * 0.19;
+            else if (chargeableIncome <= 400000) tax = 150 + 450 + 900 + 2200 + 5700 + (chargeableIncome - 100000) * 0.25;
+            else if (chargeableIncome <= 600000) tax = 150 + 450 + 900 + 2200 + 5700 + 75000 + (chargeableIncome - 400000) * 0.26;
+            else if (chargeableIncome <= 2000000) tax = 150 + 450 + 900 + 2200 + 5700 + 75000 + 52000 + (chargeableIncome - 600000) * 0.28;
+            else tax = 150 + 450 + 900 + 2200 + 5700 + 75000 + 52000 + 392000 + (chargeableIncome - 2000000) * 0.30;
+            return Math.round(tax);
+        }
+        function calculateChargeableIncome() {
+            const chargeable = income - deduction - relief;
+            document.getElementById('chargeable-income').value = chargeable;
+            document.getElementById('tax-value').innerText = `RM ${calculateTax(chargeable).toLocaleString()}`;
+            document.getElementById('tax-payable-input').value = calculateTax(chargeable);
+        }
+    </script>
+</body>
+</html>
